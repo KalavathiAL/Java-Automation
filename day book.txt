@@ -1,0 +1,59 @@
+package schooltest;
+
+import java.util.ArrayList;
+
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+import org.testng.Assert;
+import org.testng.annotations.Parameters;
+
+@Test
+public class FinanceAccounting {
+
+	private WebDriver driver;
+	String url = "https://web-school.in/";
+
+	@BeforeTest
+	public void setUp() {
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\kal\\selenium Drivers\\chromedriver.exe");
+		driver = new ChromeDriver();
+	}
+
+	@Test(priority = '1')
+	public void mainMethod() throws InterruptedException {
+		driver.get(url);
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+	}
+
+	@Test(priority = '2')
+	public void login() throws InterruptedException {
+		driver.findElement(By.xpath("(//*[@href='/try-demo/'])[1]")).click();
+		driver.findElement(By.xpath("//span[contains(text(),'Login as Admin')]")).click();
+		ArrayList<String> tabs2 = new ArrayList<String>(driver.getWindowHandles());
+		driver.switchTo().window(tabs2.get(1));
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//a[@class='has-ul']//span[text()='Finance']")).click();
+		driver.findElement(By.xpath("//a[text()='Accounting']")).click();
+		//driver.findElement(By.xpath("//a[text()='Day Book']")).click();
+		driver.findElement(By.xpath("//a[@href=\"/index.php/accounting/voucher/daybook\"]")).click();
+		driver.findElement(By.xpath("//input[@id='Voucher_transactiondate']")).sendKeys("2018-4-01");
+		driver.findElement(By.xpath("//button[@class='btn bg-teal-400 btn-labeled']")).sendKeys("C:\\Users\\kal\\Downloads\\Day_Book.xls");
+
+	}
+
+	@AfterTest
+	public void closeBrowser() {
+		driver.quit();
+		System.out.println("Browser closed successfully");
+	}
+}

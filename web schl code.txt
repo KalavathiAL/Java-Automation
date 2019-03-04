@@ -1,0 +1,64 @@
+package schooltest;
+import java.util.ArrayList;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+import org.testng.Assert;
+import org.testng.annotations.Parameters;
+//import org.openqa.selenium.interactions.Actions;
+@Test
+public class KalaProject {
+	private WebDriver driver;
+	String url="https://web-school.in/";
+
+	@BeforeTest
+	public void setUp(){
+		System.setProperty("webdriver.chrome.driver","C:\\Users\\kal\\selenium Drivers\\chromedriver.exe");
+		driver = new ChromeDriver();
+	}
+	@Test(priority='1')
+	public void mainMethod() throws InterruptedException{
+		driver.get(url);
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+	}
+	@Test(priority='2')
+	public void login() throws InterruptedException{
+		driver.findElement(By.xpath("(//*[@href='/try-demo/'])[1]")).click();
+		driver.findElement(By.xpath("//span[contains(text(),'Login as Admin')]")).click();
+		ArrayList<String> tabs2 = new ArrayList<String> (driver.getWindowHandles());
+		driver.switchTo().window(tabs2.get(1));
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//a[@class='has-ul']//span[text()='Finance']")).click();
+		driver.findElement(By.xpath("//a[text()='Fees']")).click();
+		driver.findElement(By.xpath("//a[text()='Fee Category']")).click();
+		driver.findElement(By.xpath("//input[@id='Feescategory_feescategory_name']")).sendKeys("Fine10 Fees");
+		driver.findElement(By.xpath("//input[@id='Feescategory_feescategory_receiptnoprefix']")).sendKeys("FF10");
+		driver.findElement(By.xpath("//textarea[@id='Feescategory_feescategory_description']")).sendKeys("Fine10 Fee for barrow");
+		WebElement saveBtn = driver.findElement(By.xpath("//input[@type='submit']"));
+		scrollToElementViaJavascript(saveBtn);
+		saveBtn.click();
+}
+public  void scrollToElementViaJavascript(WebElement element) 
+	{      
+		try {
+		Thread.sleep(1000);
+		} catch (InterruptedException e) {}
+	((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);     
+	}
+
+
+	@AfterTest
+	public void closeBrowser(){
+		driver.quit();
+		System.out.println("Browser closed successfully");
+	}
